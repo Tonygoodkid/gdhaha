@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gia Đình HaHa – Đăng Nhập</title>
+  <meta name="description" content="Đăng nhập để quản lý vé du lịch của bạn." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#eaf4f4" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="GĐ HaHa" />
+</head>
+<body class="login-page">
+  <div class="login-bg">
+    <div class="login-overlay"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="logo-icon"><img src="assets/logo_giadinhhaha.jpg" alt="Gia Đình HaHa" class="logo-img" /></span>
+        <h1 class="logo-title">Gia Đình HaHa</h1>
+        <p class="logo-sub">Lưu giữ mọi kỉ niệm du lịch ✨</p>
+      </div>
+
+      <form id="loginForm" class="login-form" novalidate>
+        <div class="form-group">
+          <label for="username" class="form-label">👤 Tên đăng nhập</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="form-input"
+            placeholder="Nhập tên đăng nhập..."
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">🔒 Mật khẩu</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="Nhập mật khẩu..."
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" id="togglePwd" class="toggle-pwd" aria-label="Hiện/ẩn mật khẩu">👁️</button>
+          </div>
+        </div>
+
+        <div id="loginError" class="login-error hidden">
+          ❌ Tên đăng nhập hoặc mật khẩu không đúng!
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn btn-primary btn-full">
+          🚀 Vào thôi nào!
+        </button>
+      </form>
+
+      <p class="login-footer">Chỉ dành cho những người đặc biệt 💙</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

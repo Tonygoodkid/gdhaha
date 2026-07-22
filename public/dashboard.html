@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gia Đình HaHa – Chuyến Đi</title>
+  <meta name="description" content="Quản lý tất cả sự kiện và vé du lịch của bạn trong một nơi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#eaf4f4" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="GĐ HaHa" />
+</head>
+<body class="dashboard-page">
+  <div class="dashboard-bg"><div class="dashboard-overlay"></div></div>
+
+  <header class="app-header glass">
+    <div class="header-left">
+      <img src="assets/logo_giadinhhaha.jpg" alt="Gia Đình HaHa" class="header-logo-img" />
+      <h1 class="header-title">Gia Đình HaHa</h1>
+    </div>
+    <div class="header-right">
+      <button id="syncBtn" class="btn btn-outline btn-sm" title="Đồng bộ dữ liệu" style="padding: 6px 10px;">🔄 Sync</button>
+      <button id="logoutBtn" class="btn btn-outline btn-sm">🚪 Thoát</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-intro">
+      <h2 class="page-title">✈️ Các Chuyến Đi</h2>
+      <p class="page-subtitle">Mỗi chuyến đi là một kỉ niệm đáng nhớ 🌟</p>
+    </div>
+    <div id="eventGrid" class="event-grid"></div>
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-icon">🏖️</div>
+      <p class="empty-text">Chưa có chuyến đi nào cả!</p>
+      <p class="empty-sub">Nhấn ＋ để tạo chuyến đi đầu tiên nhé 🎉</p>
+    </div>
+  </main>
+
+  <!-- FAB tạo sự kiện -->
+  <button id="fabCreate" class="fab" aria-label="Tạo sự kiện mới" title="Tạo chuyến đi mới">＋</button>
+
+  <!-- Modal: Tạo sự kiện -->
+  <div id="modalCreateEvent" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🌍 Tạo Chuyến Đi Mới</h3>
+        <button class="modal-close" data-close="modalCreateEvent">✕</button>
+      </div>
+      <form id="formCreateEvent" novalidate>
+        <div class="form-group">
+          <label for="eventName" class="form-label">📌 Tên chuyến đi</label>
+          <input type="text" id="eventName" class="form-input" placeholder="VD: Du lịch Đà Lạt tháng 6 🌸" required />
+        </div>
+        <div class="form-group">
+          <label for="eventDate" class="form-label">📅 Ngày đi (tuỳ chọn)</label>
+          <input type="date" id="eventDate" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">👥 Thành viên tham gia</label>
+          <div class="member-input-row">
+            <input type="text" id="memberInput" class="form-input" placeholder="Tên thành viên..." />
+            <button type="button" id="addMemberBtn" class="btn btn-secondary btn-sm">＋ Thêm</button>
+          </div>
+          <div id="memberTags" class="member-tags"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalCreateEvent">Huỷ</button>
+          <button type="submit" class="btn btn-primary">🎉 Tạo chuyến đi!</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Xem ảnh / file (gallery) -->
+  <div id="modalViewImage" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card modal-img-viewer" onclick="event.stopPropagation()">
+      <button class="modal-close" data-close="modalViewImage" aria-label="Đóng">✕</button>
+      <!-- Gallery nav -->
+      <button id="viewerPrev" class="viewer-nav viewer-prev" aria-label="Ảnh trước">&#8249;</button>
+      <button id="viewerNext" class="viewer-nav viewer-next" aria-label="Ảnh sau">&#8250;</button>
+      
+      <div class="viewer-content">
+        <img id="viewerImg" src="" alt="Xem ảnh lớn" class="viewer-img hidden" />
+        <iframe id="viewerPdf" class="viewer-pdf hidden" frameborder="0"></iframe>
+      </div>
+
+      <div id="viewerCounter" class="viewer-counter"></div>
+      <a id="viewerOpenBtn" class="btn-viewer-open" target="_blank" rel="noopener noreferrer" title="Mở file đầy đủ">📂 Mở file đầy đủ</a>
+    </div>
+  </div>
+
+  <!-- Modal: Thêm vé nhanh -->
+  <div id="modalQuickTicket" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🎫 Thêm Vé Nhanh</h3>
+        <button class="modal-close" data-close="modalQuickTicket">✕</button>
+      </div>
+      <form id="formQuickTicket" novalidate>
+        <div class="form-group">
+          <label for="qtTicketType" class="form-label">🏷️ Loại vé</label>
+          <select id="qtTicketType" class="form-input form-select">
+            <option value="Vé máy bay">✈️ Vé máy bay</option>
+            <option value="Vé tàu">🚂 Vé tàu</option>
+            <option value="Vé xe">🚌 Vé xe</option>
+            <option value="Vé khách sạn">🏨 Vé khách sạn</option>
+            <option value="Vé tham quan">🎡 Vé tham quan</option>
+            <option value="Vé sự kiện">🎤 Vé sự kiện</option>
+            <option value="Vé phà/tàu biển">⛴️ Vé phà/tàu biển</option>
+            <option value="Khác">📄 Khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="qtTicketName" class="form-label">📝 Tên / Mô tả vé</label>
+          <input type="text" id="qtTicketName" class="form-input" placeholder="VD: VN123 Hà Nội → Đà Lạt" required />
+        </div>
+        <div class="form-group">
+          <label for="qtTicketCode" class="form-label">🔑 Mã đặt chỗ (tuỳ chọn)</label>
+          <input type="text" id="qtTicketCode" class="form-input" placeholder="VD: ABC123" />
+        </div>
+        <div class="form-group">
+          <label for="qtTicketDate" class="form-label">📅 Ngày / Giờ (tuỳ chọn)</label>
+          <input type="datetime-local" id="qtTicketDate" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="qtTicketAmount" class="form-label">💰 Tổng số tiền (tuỳ chọn)</label>
+          <input type="number" id="qtTicketAmount" class="form-input" placeholder="VD: 500000" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">👥 Người dùng</label>
+          <div id="qtTicketUsers" class="member-checkbox-group"></div>
+        </div>
+        <div class="form-group">
+          <label for="qtTicketPayer" class="form-label">💳 Người chi</label>
+          <select id="qtTicketPayer" class="form-input form-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="qtTicketNote" class="form-label">💬 Ghi chú (tuỳ chọn)</label>
+          <textarea id="qtTicketNote" class="form-input form-textarea" placeholder="Ghi chú thêm..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">📎 Đính kèm file (tùy chọn • chọn nhiều file)</label>
+          <div class="file-drop-zone">
+            <input type="file" id="qtTicketFile" class="file-input" accept="image/*,.pdf" multiple />
+            <label for="qtTicketFile" class="file-drop-label">
+              <span class="file-drop-icon">📁</span>
+              <span>Kéo thả hoặc nhấn để chọn file</span>
+              <span class="file-drop-hint">Hỗ trợ: ảnh, PDF</span>
+            </label>
+          </div>
+          <div id="qtTicketFilePreview" class="multi-file-preview"></div>
+        </div>
+        <input type="hidden" id="qtTargetEventId" value="" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalQuickTicket">Huỷ</button>
+          <button type="submit" class="btn btn-primary">💾 Lưu vé</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Thêm hoá đơn nhanh -->
+  <div id="modalQuickInvoice" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🧾 Thêm Hoá Đơn / Ghi Chú</h3>
+        <button class="modal-close" data-close="modalQuickInvoice">✕</button>
+      </div>
+      <form id="formQuickInvoice" novalidate>
+        <div class="form-group">
+          <label for="qiTitle" class="form-label">📌 Tiêu đề</label>
+          <input type="text" id="qiTitle" class="form-input" placeholder="VD: Hoá đơn khách sạn, Tiền ăn..." required />
+        </div>
+        <div class="form-group">
+          <label for="qiAmount" class="form-label">💰 Số tiền (tuỳ chọn)</label>
+          <input type="number" id="qiAmount" class="form-input" placeholder="VD: 500000" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">👥 Người dùng</label>
+          <div id="qiUsers" class="member-checkbox-group"></div>
+        </div>
+        <div class="form-group">
+          <label for="qiPayer" class="form-label">💳 Người chi</label>
+          <select id="qiPayer" class="form-input form-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="qiNote" class="form-label">📝 Ghi chú</label>
+          <textarea id="qiNote" class="form-input form-textarea" placeholder="Ghi chú chi tiết..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🖼️ Đính kèm ảnh (tùy chọn • chọn nhiều file)</label>
+          <div class="file-drop-zone">
+            <input type="file" id="qiFile" class="file-input" accept="image/*,.pdf" multiple />
+            <label for="qiFile" class="file-drop-label">
+              <span class="file-drop-icon">📷</span>
+              <span>Kéo thả hoặc nhấn để chọn file</span>
+              <span class="file-drop-hint">Hỗ trợ: PNG, JPG, PDF</span>
+            </label>
+          </div>
+          <div id="qiFilePreview" class="multi-file-preview"></div>
+        </div>
+        <input type="hidden" id="qiTargetEventId" value="" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalQuickInvoice">Huỷ</button>
+          <button type="submit" class="btn btn-primary">💾 Lưu hoá đơn</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Xác nhận xoá -->
+  <div id="modalDeleteEvent" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">🗑️ Xoá chuyến đi?</h3>
+        <button class="modal-close" data-close="modalDeleteEvent">✕</button>
+      </div>
+      <p class="modal-body-text">Bạn có chắc muốn xoá chuyến đi này không? Tất cả vé và hoá đơn sẽ bị xoá theo nhé 😢</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" data-close="modalDeleteEvent">Giữ lại</button>
+        <button id="confirmDeleteEvent" class="btn btn-danger">Xoá luôn</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
