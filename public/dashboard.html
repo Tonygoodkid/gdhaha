@@ -118,7 +118,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="qtTicketName" class="form-label">📝 Tên / Mô tả vé</label>
+          <label for="qtTicketName" class="form-label">📝 Tên / Mô tả vé <span class="req">*</span></label>
           <input type="text" id="qtTicketName" class="form-input" placeholder="VD: VN123 Hà Nội → Đà Lạt" required />
         </div>
         <div class="form-group">
@@ -130,15 +130,15 @@
           <input type="datetime-local" id="qtTicketDate" class="form-input" />
         </div>
         <div class="form-group">
-          <label for="qtTicketAmount" class="form-label">💰 Tổng số tiền (tuỳ chọn)</label>
-          <input type="number" id="qtTicketAmount" class="form-input" placeholder="VD: 500000" min="0" />
+          <label for="qtTicketAmount" class="form-label">💰 Tổng số tiền <span class="req">*</span></label>
+          <input type="text" inputmode="numeric" id="qtTicketAmount" class="form-input amount-input" placeholder="VD: 500,000" />
         </div>
         <div class="form-group">
           <label class="form-label">👥 Người dùng</label>
           <div id="qtTicketUsers" class="member-checkbox-group"></div>
         </div>
         <div class="form-group">
-          <label for="qtTicketPayer" class="form-label">💳 Người chi</label>
+          <label for="qtTicketPayer" class="form-label">💳 Người chi <span class="req">*</span></label>
           <select id="qtTicketPayer" class="form-input form-select"></select>
         </div>
         <div class="form-group">
@@ -175,20 +175,24 @@
       </div>
       <form id="formQuickInvoice" novalidate>
         <div class="form-group">
-          <label for="qiTitle" class="form-label">📌 Tiêu đề</label>
+          <label for="qiTitle" class="form-label">📌 Tiêu đề <span class="req">*</span></label>
           <input type="text" id="qiTitle" class="form-input" placeholder="VD: Hoá đơn khách sạn, Tiền ăn..." required />
         </div>
         <div class="form-group">
-          <label for="qiAmount" class="form-label">💰 Số tiền (tuỳ chọn)</label>
-          <input type="number" id="qiAmount" class="form-input" placeholder="VD: 500000" min="0" />
+          <label for="qiAmount" class="form-label">💰 Số tiền <span class="req">*</span></label>
+          <input type="text" inputmode="numeric" id="qiAmount" class="form-input amount-input" placeholder="VD: 500,000" />
         </div>
         <div class="form-group">
           <label class="form-label">👥 Người dùng</label>
           <div id="qiUsers" class="member-checkbox-group"></div>
         </div>
         <div class="form-group">
-          <label for="qiPayer" class="form-label">💳 Người chi</label>
+          <label for="qiPayer" class="form-label">💳 Người chi <span class="req">*</span></label>
           <select id="qiPayer" class="form-input form-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="qiDate" class="form-label">📅 Ngày / Giờ</label>
+          <input type="datetime-local" id="qiDate" class="form-input" />
         </div>
         <div class="form-group">
           <label for="qiNote" class="form-label">📝 Ghi chú</label>

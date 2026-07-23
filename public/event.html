@@ -51,6 +51,7 @@
     <div class="tabs-bar glass">
       <button class="tab-btn active" id="tabTickets" data-tab="tickets">🎫 Vé</button>
       <button class="tab-btn" id="tabInvoices" data-tab="invoices">🧾 Hoá đơn</button>
+      <button class="tab-btn" id="tabSummary" data-tab="summary">📊 Tổng hợp</button>
       <button class="tab-btn" id="tabSchedule" data-tab="schedule">🗓️ Lịch trình</button>
     </div>
 
@@ -74,6 +75,18 @@
       <div id="emptyInvoices" class="empty-state-sm hidden">
         <span>📝</span> Chưa có ghi chú nào, nhấn 🧾 góc dưới phải để thêm!
       </div>
+    </div>
+
+    <!-- Tab: Tổng hợp -->
+    <div id="panelSummary" class="tab-panel hidden">
+      <div class="panel-header">
+        <h3 class="panel-title">📊 Tổng hợp chi tiêu</h3>
+      </div>
+      <div class="form-group treasurer-group">
+        <label for="treasurerSelect" class="form-label">🧑‍💼 Người thủ quỹ (đứng ra thu &amp; chi)</label>
+        <select id="treasurerSelect" class="form-input form-select"></select>
+      </div>
+      <div id="summaryContent"></div>
     </div>
 
     <!-- Tab: Lịch trình -->
@@ -120,7 +133,7 @@
         </div>
 
         <div class="form-group">
-          <label for="ticketName" class="form-label">📝 Tên / Mô tả vé</label>
+          <label for="ticketName" class="form-label">📝 Tên / Mô tả vé <span class="req">*</span></label>
           <input type="text" id="ticketName" class="form-input" placeholder="VD: VN123 Hà Nội → Đà Lạt" required />
         </div>
 
@@ -135,8 +148,8 @@
         </div>
 
         <div class="form-group">
-          <label for="ticketAmount" class="form-label">💰 Tổng số tiền (tuỳ chọn)</label>
-          <input type="number" id="ticketAmount" class="form-input" placeholder="VD: 500000" min="0" />
+          <label for="ticketAmount" class="form-label">💰 Tổng số tiền <span class="req">*</span></label>
+          <input type="text" inputmode="numeric" id="ticketAmount" class="form-input amount-input" placeholder="VD: 500,000" />
         </div>
 
         <div class="form-group">
@@ -145,7 +158,7 @@
         </div>
 
         <div class="form-group">
-          <label for="ticketPayer" class="form-label">💳 Người chi</label>
+          <label for="ticketPayer" class="form-label">💳 Người chi <span class="req">*</span></label>
           <select id="ticketPayer" class="form-input form-select"></select>
         </div>
 
@@ -184,13 +197,13 @@
       </div>
       <form id="formAddInvoice" novalidate>
         <div class="form-group">
-          <label for="invoiceTitle" class="form-label">📌 Tiêu đề</label>
+          <label for="invoiceTitle" class="form-label">📌 Tiêu đề <span class="req">*</span></label>
           <input type="text" id="invoiceTitle" class="form-input" placeholder="VD: Hoá đơn khách sạn, Tiền ăn, v.v." required />
         </div>
 
         <div class="form-group">
-          <label for="invoiceAmount" class="form-label">💰 Số tiền (tuỳ chọn)</label>
-          <input type="number" id="invoiceAmount" class="form-input" placeholder="VD: 500000" min="0" />
+          <label for="invoiceAmount" class="form-label">💰 Số tiền <span class="req">*</span></label>
+          <input type="text" inputmode="numeric" id="invoiceAmount" class="form-input amount-input" placeholder="VD: 500,000" />
         </div>
 
         <div class="form-group">
@@ -199,8 +212,13 @@
         </div>
 
         <div class="form-group">
-          <label for="invoicePayer" class="form-label">💳 Người chi</label>
+          <label for="invoicePayer" class="form-label">💳 Người chi <span class="req">*</span></label>
           <select id="invoicePayer" class="form-input form-select"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="invoiceDate" class="form-label">📅 Ngày / Giờ</label>
+          <input type="datetime-local" id="invoiceDate" class="form-input" />
         </div>
 
         <div class="form-group">
